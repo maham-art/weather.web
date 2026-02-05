@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Weather Application</title>
+</head>
+<style>
+  body{
+    background-color: rgb(210, 168, 249);
+  }
+  .main{
+    margin-top: 200px;
+    background-color: rgb(189, 140, 235);
+  }
+.box1{
+color: blueviolet;
+}
+.box2{
+  color: rgb(5, 5, 114);
+
+}
+
+button{
+  background-color: blueviolet;
+}
+
+button:hover{
+ background-color: rgb(186, 99, 212);
+}
+
+button:active{
+  background-color: blueviolet;
+}
+
+input{
+  background-color: rgb(231, 196, 245);
+}
+
+
+</style>
+<body>
+  <div class="main">
+  <hr>
+
+<h2 class="box1" align="center">WEATHER APPLICATION</h2>
+
+<div class="box2" align="center">
+  <form onsubmit="checkweather(); return false;">
+    <label>City Name</label><br>
+    <input type="text" id="cityname" placeholder="Enter your city"><br><br>
+
+    <button>Check Weather</button>
+    
+  </form>
+
+  <hr>
+  <div id="weather"></div>
+</div>
+</div>
+<script>
+function checkweather() {
+    const cityvalue = document.getElementById("cityname").value;
+    const weatherref = document.getElementById("weather");
+
+    fetch(`https://p2pclouds.up.railway.app/v1/learn/weather?city=${cityvalue}`)
+    .then(response => response.json())
+    .then(data => {
+
+       if(!data.current){
+            weatherref.innerHTML = "City not found ❌";
+            return;
+        }
+
+        const fahrenheit = (data.current.temp_c * 9/5) + 32;
+        const currentTime = new Date().toLocaleString();
+
+        weatherref.innerHTML = `
+            <p>🌡️ Temperature: ${data.current.temp_c} °C</p>
+            <p>🤗 Feels Like: ${data.current.feelslike_c} °C</p>
+            <p>🍃 Wind Speed: ${data.current.wind_kph} kph</p>
+            <p>🌍 Country: ${data.location.country}</p>
+            <p>⏰ Current Time: ${currentTime}</p>
+        `;
+    })
+    .catch(error => {
+        weatherref.innerHTML = "Something went wrong ❌";
+        console.log(error);
+    });
+}
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
